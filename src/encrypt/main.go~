@@ -1,0 +1,27 @@
+package encrypt
+
+import (
+  "crypto/aes"
+  "crypto/cipher"
+  "fmt"
+)
+
+func EncryptAES(dst, src, key, iv []byte) error {
+  aesBlockEncryptor, err := aes.NewCipher([]byte(key))
+  if err != nil {
+    return err
+  }
+  aesEncrypter := cipher.NewCFBEncrypter(aesBlockEncryptor, iv)
+  aesEncrypter.XORKeyStream(dst, src)
+  return nil
+}
+
+func DecryptAES(dst, src, key, iv []byte) error {
+  aesBlockEncryptor, err := aes.NewCipher([]byte(key))
+  if err != nil {
+    return err
+  }
+  aesEncrypter := cipher.NewCFBDecrypter(aesBlockEncryptor, iv)
+  aesEncrypter.XORKeyStream(dst, dst)
+  return nil
+}
