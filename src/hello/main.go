@@ -5,5 +5,7 @@ import (
 )
 
 func main() {
-	fmt.Printf("hello world")
+	var msg string
+	msg = "hello world using variable"
+	fmt.Printf(msg)
 }
