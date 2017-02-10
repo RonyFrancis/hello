@@ -15,16 +15,19 @@ func main() {
 	t1 := time.Now()
 	var c chan string = make(chan string)
 	for i := 1; i <= 10; i++ {
-
-		fmt.Print("#")
-		fmt.Println(postcall())
+		go postcall(c)
+	}
+	for i := 1; i <= 10; i++ {
+		msg := <-c
+		fmt.Printf("$")
+		fmt.Printf(msg)
 	}
 	t2 := time.Now()
 	fmt.Println(t1.Sub(t2))
 
 }
 
-func postcall() string {
+func postcall(c chan string) {
 	v := url.Values{}
 	v.Set("no", strconv.Itoa(rand.Intn(100))) // encrypted msisdn 1212121212
 	//custid := "vPTGEkzVsvLGOcF77PVa9g=="
@@ -41,7 +44,6 @@ func postcall() string {
 		os.Exit(0)
 	}
 	//resp.Body.close()
-
-	return string(robots)
+	c <- string(robots)
 
 }
