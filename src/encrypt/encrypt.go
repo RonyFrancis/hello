@@ -1,42 +1,42 @@
 package encrypt
 
 import (
-  "crypto/aes"
-  "crypto/cipher"
-  _"fmt"
+	"crypto/aes"
+	"crypto/cipher"
+	_ "fmt"
 )
 
 //func main() {
-  //input := []byte("this is a test")
-  //iv := []byte("532b6195636c6127")[:aes.BlockSize]
-  //key := []byte("532b6195636c61279a010000")
+//input := []byte("this is a test")
+//iv := []byte("532b6195636c6127")[:aes.BlockSize]
+//key := []byte("532b6195636c61279a010000")
 
-  //fmt.Println("Input:     ", input)
-  //fmt.Println("Key:       ", key)
-  //fmt.Println("IV:        ", iv)
+//fmt.Println("Input:     ", input)
+//fmt.Println("Key:       ", key)
+//fmt.Println("IV:        ", iv)
 
-  //encrypted := make([]byte, len(input))
-  //EncryptAES(encrypted, input, key, iv)
+//encrypted := make([]byte, len(input))
+//EncryptAES(encrypted, input, key, iv)
 
- // fmt.Println("Output:    ", encrypted)
+// fmt.Println("Output:    ", encrypted)
 //}
 
-func EncryptAES(dst, src, key, iv []byte) error {
-  aesBlockEncryptor, err := aes.NewCipher([]byte(key))
-  if err != nil {
-    return err
-  }
-  aesEncrypter := cipher.NewCFBEncrypter(aesBlockEncryptor, iv)
-  aesEncrypter.XORKeyStream(dst, src)
-  return nil
+func EncryptAESCFB(dst, src, key, iv []byte) error {
+	aesBlockEncryptor, err := aes.NewCipher([]byte(key))
+	if err != nil {
+		return err
+	}
+	aesEncrypter := cipher.NewCFBEncrypter(aesBlockEncryptor, iv)
+	aesEncrypter.XORKeyStream(dst, src)
+	return nil
 }
 
-func DecryptAES(dst, src, key, iv []byte) error {
-  aesBlockEncryptor, err := aes.NewCipher([]byte(key))
-  if err != nil {
-    return err
-  }
-  aesEncrypter := cipher.NewCFBDecrypter(aesBlockEncryptor, iv)
-  aesEncrypter.XORKeyStream(dst, dst)
-  return nil
+func DecryptAESCFB(dst, src, key, iv []byte) error {
+	aesBlockEncryptor, err := aes.NewCipher([]byte(key))
+	if err != nil {
+		return err
+	}
+	aesEncrypter := cipher.NewCFBDecrypter(aesBlockEncryptor, iv)
+	aesEncrypter.XORKeyStream(dst, dst)
+	return nil
 }

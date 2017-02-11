@@ -1,6 +1,7 @@
 package main
 
 import (
+	"controller/customer"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
@@ -14,16 +15,18 @@ import (
 func main() {
 	t1 := time.Now()
 	var c chan string = make(chan string)
-	for i := 1; i <= 10; i++ {
+	for i := 1; i <= 6; i++ {
 		go postcall(c)
 	}
-	for i := 1; i <= 10; i++ {
+	for i := 1; i <= 6; i++ {
 		msg := <-c
 		fmt.Printf("$")
 		fmt.Printf(msg)
 	}
 	t2 := time.Now()
 	fmt.Println(t1.Sub(t2))
+	http.HandleFunc("/users/register", customer.RegisterHandler)
+	http.ListenAndServe(":8085", nil)
 
 }
 
