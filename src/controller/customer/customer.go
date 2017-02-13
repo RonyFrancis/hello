@@ -17,21 +17,29 @@ type Data struct {
 	Uuid   string `json:"uuid"`
 	UserId int    `json:"user_id"`
 }
-type DataOtp struct {
-	Status      string  `json:"status"`
-	AuthToken   string  `json:"auth_token"`
-	ApiKey      string  `json:"api_key"`
-	AcctDetails Account `json:"acctdetails"`
-}
-type Account struct {
-	CustomerDetail AccountDetail `json:"customerDetail"`
-}
+
 type AccountDetail struct {
 	Accounts        map[int]map[string]string `json:"accounts"` // not sure about this line
 	CustId          string                    `json:"custId"`
 	Message         string                    `json:"message"`
 	MobileNo        string                    `json:"mobileNo"`
 	SuccesOrFailure string                    `json:"successOrFailure"`
+}
+type Account struct {
+	CustomerDetail AccountDetail `json:"customerDetail"`
+}
+type DataOtp struct {
+	Status      string  `json:"status"`
+	AuthToken   string  `json:"auth_token"`
+	ApiKey      string  `json:"api_key"`
+	AcctDetails Account `json:"acctdetails"`
+}
+type ResponseOtp struct {
+	StatusCode    string  `json:"status_code"`
+	StatusMessage string  `json:"status_message"`
+	Request       Method  `json:"request"`
+	Response      DataOtp `json:"response`
+	Version       int     `json:"version"`
 }
 type Response struct {
 	StatusCode    string `json:"status_code"`
@@ -72,13 +80,19 @@ func OtpVerifyHandler(w http.ResponseWriter, r *http.Request) { // url /users/:i
 	r.ParseForm() // parse the form
 	//r.Form.Encode gives value in string form "name=Ava"
 	method := Method{Method: r.URL.Path}
-	uuid, err := Uuid()
-	if err != nil {
-		http.Error(w, "GET called", 500)
-		return
-	}
-	data := Data{Status: "200", Uuid: uuid, UserId: 1}
-	todos := Response{StatusCode: "200", StatusMessage: "success", Request: method, Response: data, Version: 1}
+	//uuid, err := Uuid()
+	// if err != nil {
+	// 	http.Error(w, "GET called", 500)
+	// 	return
+	// }
+
+	accounts := AccountDetail{Accounts: map[int]map[string]string{
+		0: map[string]string{
+			"name":  "Hydrogen",
+			"state": "gas"}}, CustId: "1234", Message: "qweq", MobileNo: "9061415632", SuccesOrFailure: "S"}
+	account := Account{CustomerDetail: accounts}
+	dataotp := DataOtp{Status: "200", AuthToken: "111", ApiKey: "1111", AcctDetails: account}
+	todos := ResponseOtp{StatusCode: "200", StatusMessage: "success", Request: method, Response: dataotp, Version: 1}
 	json.NewEncoder(w).Encode(todos)
 }
 

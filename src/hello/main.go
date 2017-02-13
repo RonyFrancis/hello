@@ -25,7 +25,8 @@ func main() {
 	}
 	t2 := time.Now()
 	fmt.Println(t1.Sub(t2))
-	http.HandleFunc("/users/register", customer.RegisterHandler)
+	http.HandleFunc("/uk/users/register", customer.RegisterHandler)
+	http.HandleFunc("/uk/users/1/verify", customer.OtpVerifyHandler)
 	http.ListenAndServe(":8085", nil)
 
 }
