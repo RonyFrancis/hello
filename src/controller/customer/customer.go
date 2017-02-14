@@ -18,12 +18,16 @@ type Data struct {
 	UserId int    `json:"user_id"`
 }
 
+// type Detail struct {
+// 	Value map[string]string `json:"value"`
+// }
 type AccountDetail struct {
-	Accounts        map[int]map[string]string `json:"accounts"` // not sure about this line
-	CustId          string                    `json:"custId"`
-	Message         string                    `json:"message"`
-	MobileNo        string                    `json:"mobileNo"`
-	SuccesOrFailure string                    `json:"successOrFailure"`
+	//Accounts        map[int]map[string]string `json:"accounts"` // not sure about this line
+	Accounts        [2]map[string]int `json:"accounts"`
+	CustId          string            `json:"custId"`
+	Message         string            `json:"message"`
+	MobileNo        string            `json:"mobileNo"`
+	SuccesOrFailure string            `json:"successOrFailure"`
 }
 type Account struct {
 	CustomerDetail AccountDetail `json:"customerDetail"`
@@ -76,20 +80,19 @@ func OtpVerifyHandler(w http.ResponseWriter, r *http.Request) { // url /users/:i
 		http.Error(w, "Wrong method", 500)
 		return
 	}
-
+	// map[int]map[string]string{
+	// 		0: map[string]string{
+	// 			"name":  "Hydrogen",
+	// 			"state": "gas"}}
 	r.ParseForm() // parse the form
 	//r.Form.Encode gives value in string form "name=Ava"
+	aom1 := map[string]int{"one": 1, "two": 4, "three": 9}
+	aom2 := map[string]int{"one": 1, "two": 4, "three": 9}
+	var arr [2]map[string]int
+	arr[0] = aom1 // put map into the array
+	arr[1] = aom2
 	method := Method{Method: r.URL.Path}
-	//uuid, err := Uuid()
-	// if err != nil {
-	// 	http.Error(w, "GET called", 500)
-	// 	return
-	// }
-
-	accounts := AccountDetail{Accounts: map[int]map[string]string{
-		0: map[string]string{
-			"name":  "Hydrogen",
-			"state": "gas"}}, CustId: "1234", Message: "qweq", MobileNo: "9061415632", SuccesOrFailure: "S"}
+	accounts := AccountDetail{Accounts: arr, CustId: "1234", Message: "qweq", MobileNo: "9061415632", SuccesOrFailure: "S"}
 	account := Account{CustomerDetail: accounts}
 	dataotp := DataOtp{Status: "200", AuthToken: "111", ApiKey: "1111", AcctDetails: account}
 	todos := ResponseOtp{StatusCode: "200", StatusMessage: "success", Request: method, Response: dataotp, Version: 1}
