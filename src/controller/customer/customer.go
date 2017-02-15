@@ -136,7 +136,7 @@ func AccountHandler(w http.ResponseWriter, r *http.Request) { // url /users/:id/
 	todos := StdResponse{StatusCode: "200", StatusMessage: "success", Request: method, Response: dataaccount, Version: 1}
 	json.NewEncoder(w).Encode(todos)
 }
-func TransHandler(w http.ResponseWriter, r *http.Request) { // url /users/:id/accounts
+func TransHandler(w http.ResponseWriter, r *http.Request) { // url /users/:id/transactions
 
 	// check method is Post or not
 	if r.Method != "POST" {
@@ -149,7 +149,7 @@ func TransHandler(w http.ResponseWriter, r *http.Request) { // url /users/:id/ac
 	todos := StdResponse{StatusCode: "200", StatusMessage: "success", Request: method, Response: dataaccount, Version: 1}
 	json.NewEncoder(w).Encode(todos)
 }
-func InboxHandler(w http.ResponseWriter, r *http.Request) { // url /users/:id/accounts
+func InboxHandler(w http.ResponseWriter, r *http.Request) { // url /messages
 
 	// check method is Post or not
 	if r.Method != "POST" {
