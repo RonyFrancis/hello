@@ -27,6 +27,9 @@ func main() {
 	fmt.Println(t1.Sub(t2))
 	http.HandleFunc("/uk/users/register", customer.RegisterHandler)
 	http.HandleFunc("/uk/users/1/verify", customer.OtpVerifyHandler)
+	http.HandleFunc("/uk/users/:id/accounts", customer.AccountHandler)
+	http.HandleFunc("/uk/users/1/accounts/1/transactions", customer.TransHandler)
+	http.HandleFunc("/uk/messages", customer.InboxHandler)
 	http.ListenAndServe(":8085", nil)
 
 }

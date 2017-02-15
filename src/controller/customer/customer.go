@@ -21,28 +21,33 @@ type Data struct {
 // type Detail struct {
 // 	Value map[string]string `json:"value"`
 // }
-type AccountDetail struct {
-	//Accounts        map[int]map[string]string `json:"accounts"` // not sure about this line
-	Accounts        [2]map[string]int `json:"accounts"`
-	CustId          string            `json:"custId"`
-	Message         string            `json:"message"`
-	MobileNo        string            `json:"mobileNo"`
-	SuccesOrFailure string            `json:"successOrFailure"`
-}
-type Account struct {
-	CustomerDetail AccountDetail `json:"customerDetail"`
-}
+
+//-----------------------------------------
+// for accountdetails not needed now
+// --------------------------------------------
+
+// type AccountDetail struct {
+// 	//Accounts        map[int]map[string]string `json:"accounts"` // not sure about this line
+// 	Accounts        [2]map[string]int `json:"accounts"`
+// 	CustId          string            `json:"custId"`
+// 	Message         string            `json:"message"`
+// 	MobileNo        string            `json:"mobileNo"`
+// 	SuccesOrFailure string            `json:"successOrFailure"`
+// }
+// type Account struct {
+// 	CustomerDetail AccountDetail `json:"customerDetail"`
+// }
 type DataOtp struct {
-	Status      string  `json:"status"`
-	AuthToken   string  `json:"auth_token"`
-	ApiKey      string  `json:"api_key"`
-	AcctDetails Account `json:"acctdetails"`
+	Status    string `json:"status"`
+	AuthToken string `json:"auth_token"`
+	ApiKey    string `json:"api_key"`
+	//AcctDetails Account `json:"acctdetails"`
 }
 type ResponseOtp struct {
 	StatusCode    string  `json:"status_code"`
 	StatusMessage string  `json:"status_message"`
 	Request       Method  `json:"request"`
-	Response      DataOtp `json:"response`
+	Response      DataOtp `json:"response"`
 	Version       int     `json:"version"`
 }
 type Response struct {
@@ -51,6 +56,18 @@ type Response struct {
 	Request       Method `json:"request"`
 	Response      Data   `json:"response`
 	Version       int    `json:"version"`
+}
+type StdResponse struct {
+	StatusCode    string       `json:"status_code"`
+	StatusMessage string       `json:"status_message"`
+	Request       Method       `json:"request"`
+	Version       int          `json:"version"`
+	Response      DataResponse `json:"response"`
+}
+type DataResponse struct {
+	Name         string `json:"name"`
+	MobileNumber string `json:"mobile_number"`
+	CustomerType string `json:"customer_type"`
 }
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) { // url /users/register
@@ -86,19 +103,65 @@ func OtpVerifyHandler(w http.ResponseWriter, r *http.Request) { // url /users/:i
 	// 			"state": "gas"}}
 	r.ParseForm() // parse the form
 	//r.Form.Encode gives value in string form "name=Ava"
-	aom1 := map[string]int{"one": 1, "two": 4, "three": 9}
-	aom2 := map[string]int{"one": 1, "two": 4, "three": 9}
-	var arr [2]map[string]int
-	arr[0] = aom1 // put map into the array
-	arr[1] = aom2
+
+	//-----------------------------------------------------------
+	// aom1 := map[string]int{"one": 1, "two": 4, "three": 9}
+	// aom2 := map[string]int{"one": 1, "two": 4, "three": 9}
+	// var arr [2]map[string]int
+	// arr[0] = aom1 // put map into the array
+	// arr[1] = aom2
+	//-----------------------------------------------------------
+
 	method := Method{Method: r.URL.Path}
-	accounts := AccountDetail{Accounts: arr, CustId: "1234", Message: "qweq", MobileNo: "9061415632", SuccesOrFailure: "S"}
-	account := Account{CustomerDetail: accounts}
-	dataotp := DataOtp{Status: "200", AuthToken: "111", ApiKey: "1111", AcctDetails: account}
+
+	//-----------------------------------------------------------
+	// accounts := AccountDetail{Accounts: arr, CustId: "1234", Message: "qweq", MobileNo: "9061415632", SuccesOrFailure: "S"}
+	// account := Account{CustomerDetail: accounts}
+	//-----------------------------------------------------------
+
+	dataotp := DataOtp{Status: "200", AuthToken: "111", ApiKey: "1111"}
 	todos := ResponseOtp{StatusCode: "200", StatusMessage: "success", Request: method, Response: dataotp, Version: 1}
 	json.NewEncoder(w).Encode(todos)
 }
+func AccountHandler(w http.ResponseWriter, r *http.Request) { // url /users/:id/accounts
 
+	// check method is Post or not
+	if r.Method != "POST" {
+		http.Error(w, "Wrong method", 500)
+		return
+	}
+	r.ParseForm() // parse the form
+	dataaccount := DataResponse{Name: "Rony", MobileNumber: "9061415632", CustomerType: "VIP"}
+	method := Method{Method: r.URL.Path}
+	todos := StdResponse{StatusCode: "200", StatusMessage: "success", Request: method, Response: dataaccount, Version: 1}
+	json.NewEncoder(w).Encode(todos)
+}
+func TransHandler(w http.ResponseWriter, r *http.Request) { // url /users/:id/accounts
+
+	// check method is Post or not
+	if r.Method != "POST" {
+		http.Error(w, "Wrong method", 500)
+		return
+	}
+	r.ParseForm() // parse the form
+	dataaccount := DataResponse{Name: "Rony", MobileNumber: "9061415632", CustomerType: "VIP"}
+	method := Method{Method: r.URL.Path}
+	todos := StdResponse{StatusCode: "200", StatusMessage: "success", Request: method, Response: dataaccount, Version: 1}
+	json.NewEncoder(w).Encode(todos)
+}
+func InboxHandler(w http.ResponseWriter, r *http.Request) { // url /users/:id/accounts
+
+	// check method is Post or not
+	if r.Method != "POST" {
+		http.Error(w, "Wrong method", 500)
+		return
+	}
+	r.ParseForm() // parse the form
+	dataaccount := DataResponse{Name: "Rony", MobileNumber: "9061415632", CustomerType: "VIP"}
+	method := Method{Method: r.URL.Path}
+	todos := StdResponse{StatusCode: "200", StatusMessage: "success", Request: method, Response: dataaccount, Version: 1}
+	json.NewEncoder(w).Encode(todos)
+}
 func RandomBytes(n int) ([]byte, error) {
 	bytes := make([]byte, n)
 	_, err := rand.Read(bytes)
