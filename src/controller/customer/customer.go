@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -71,7 +72,7 @@ type DataResponse struct {
 }
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) { // url /users/register
-
+	log.Println("this reggisteration")
 	// check method is Post or not
 	if r.Method != "POST" {
 		http.Error(w, "GET called", 500)
